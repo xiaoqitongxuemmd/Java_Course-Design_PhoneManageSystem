@@ -1,4 +1,3 @@
-//GUI编程
 package PhoneStoreManageSystem;
 import java.sql.*;
 import java.awt.*;
@@ -8,15 +7,16 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 public class GUI extends JFrame implements ActionListener{
-	JFrame Jf1,Jf2,Jf3,Jf4,Jf5,Jf6,Jf7;
-	JTextField Jtf1,Jtf2,Jtf3,Jtf4,Jtf5,Jtf6,Jtf7,Jtf8,Jtf9,Jtf10,Jtf11,Jtf12;
+	JFrame Jf1,Jf2,Jf3,Jf4,Jf5,Jf6,Jf7,Jf8,Jf9;
+	JTextField Jtf1,Jtf2,Jtf3,Jtf4,Jtf5,Jtf6,Jtf7,Jtf8,Jtf9,Jtf10,Jtf11,Jtf12,Jtf13,Jtf14,Jtf15;
 	JPasswordField Jpw1,Jpw2,Jpw3;
-	JLabel Jl1,Jl2,Jl3,Jl4,Jl5,Jl6,Jl7,Jl8,Jl9,Jl10,Jl11,Jl12,Jl13,Jl14,Jl15,Jl16,Jl17;
-	JButton Jb1,Jb2,Jb3,Jb4,Jb5,Jb6,Jb7,Jb8,Jb9,Jb10,Jb11,Jb12,Jb13,Jb14,Jb15,Jb16,Jb17;
-	ButtonGroup Jgroup1,Jgroup2,Jgroup3,Jgroup4,Jgroup5,Jgroup6;
-	JRadioButton Jrb1,Jrb2,Jrb3,Jrb4,Jrb5,Jrb6,Jrb7,Jrb8,Jrb9,Jrb10,Jrb11,Jrb12,Jrb13,Jrb14,Jrb15,Jrb16,Jrb17,Jrb18,Jrb19,Jrb20,Jrb21;
+	JLabel Jl1,Jl2,Jl3,Jl4,Jl5,Jl6,Jl7,Jl8,Jl9,Jl10,Jl11,Jl12,Jl13,Jl14,Jl15,Jl16,Jl17,Jl18,Jl19,Jl20,Jl21,Jl22,Jl23,Jl24;
+	JButton Jb1,Jb2,Jb3,Jb4,Jb5,Jb6,Jb7,Jb8,Jb9,Jb10,Jb11,Jb12,Jb13,Jb14,Jb15,Jb16,Jb17,Jb18,Jb19,Jb20,Jb21;
+	ButtonGroup Jgroup1,Jgroup2,Jgroup3,Jgroup4,Jgroup5,Jgroup6,Jgroup7,Jgroup8;
+	JRadioButton Jrb1,Jrb2,Jrb3,Jrb4,Jrb5,Jrb6,Jrb7,Jrb8,Jrb9,Jrb10,Jrb11,Jrb12,Jrb13,Jrb14,Jrb15,Jrb16,Jrb17,Jrb18,Jrb19,Jrb20,Jrb21,Jrb22,Jrb23,Jrb24,Jrb25;
 	JTable Jt1;
-	JComboBox Jcb1,Jcb2,Jcb3,Jcb4;
+	JComboBox Jcb1,Jcb2,Jcb3,Jcb4,Jcb5,Jcb6;
+	JMenuItem Jmi1,Jmi2;
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 	String Time = df.format(new Date());
 	String RegisterType="";
@@ -24,6 +24,8 @@ public class GUI extends JFrame implements ActionListener{
 	String AddType = "";
 	String DeleteType = "";
 	String ChangeType = "";
+	String IOType = "";
+	String AllocateType = "";
 	//登录界面
 	public void disLoadUI(boolean Visible) {
 		setLayout(new GridLayout(5,1));
@@ -68,6 +70,18 @@ public class GUI extends JFrame implements ActionListener{
 	public void disMainUI(boolean Visible) {
 		Jf1 = new JFrame("手机仓库管理系统");
 		Jf1.setLayout(new GridLayout(4,1));
+		JMenuBar Jmb = new JMenuBar();
+		JMenu Jm1 = new JMenu("基本业务");
+		JMenu Jm2 = new JMenu("调拨业务");
+		Jmi1 = new JMenuItem("出入库业务");
+		Jmi1.addActionListener(this);
+		Jmi2 = new JMenuItem("仓库及库存调拨");
+		Jmi2.addActionListener(this);
+		Jm1.add(Jmi1);
+		Jm2.add(Jmi2);
+		Jmb.add(Jm1);
+		Jmb.add(Jm2);
+		Jf1.setJMenuBar(Jmb);
 		Jf1.add(Jl2);
 		JLabel Jl3 = new JLabel("登录时间:"+Time);
 		Jf1.add(Jl3);
@@ -407,6 +421,104 @@ public class GUI extends JFrame implements ActionListener{
 		Jf7.setLocation(300,200);
 		Jf7.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+	//出入库界面
+	public void disWarehouseUI(boolean Visible) {
+		Jf8 = new JFrame("出入库业务");
+		Jf8.setLayout(new GridLayout(7,1,30,30));
+		Jf8.add(new JLabel("请选择出库还是入库"));
+		JPanel Jp1 = new JPanel(new GridLayout(1,2,30,30));
+		Jrb22 = new JRadioButton("入库");
+		Jrb22.addActionListener(this);
+		Jrb23 = new JRadioButton("出库");
+		Jrb23.addActionListener(this);
+		Jgroup7 = new ButtonGroup();
+		Jgroup7.add(Jrb22);
+		Jgroup7.add(Jrb23);
+		Jp1.add(Jrb22);
+		Jp1.add(Jrb23);
+		Jf8.add(Jp1);
+		JPanel Jp2 = new JPanel(new GridLayout(1,2,30,30));
+		Jl18 = new JLabel("生产厂商");
+		Jp2.add(Jl18);
+		Jcb5 = new JComboBox();
+		Jcb5.addItem("Apple");
+		Jcb5.addItem("HuaWei");
+		Jcb5.addItem("MI");
+		Jp2.add(Jcb5);
+		Jf8.add(Jp2);
+		JPanel Jp3 = new JPanel(new GridLayout(1,2,30,30));
+		Jl19 = new JLabel("手机型号");
+		Jp3.add(Jl19);
+		Jtf13 = new JTextField(20);
+		Jp3.add(Jtf13);
+		Jf8.add(Jp3);
+		JPanel Jp4 = new JPanel(new GridLayout(1,2,30,30));
+		Jl20 = new JLabel("手机数量");
+		Jp4.add(Jl20);
+		Jtf14 = new JTextField(20);
+		Jp4.add(Jtf14);
+		Jf8.add(Jp4);
+		Jl21 = new JLabel();
+		Jf8.add(Jl21);
+		JPanel Jp5 = new JPanel(new GridLayout(1,2,30,30));
+		Jb18 = new JButton("返回上一级");
+		Jb18.addActionListener(this);
+		Jp5.add(Jb18);
+		Jb19 = new JButton("执行");
+		Jb19.addActionListener(this);
+		Jp5.add(Jb19);
+		Jf8.add(Jp5);
+		Jf8.setSize(300,400);
+		Jf8.setVisible(Visible);
+		Jf8.setLocation(300,300);
+		Jf8.setDefaultCloseOperation(EXIT_ON_CLOSE);;
+	}
+	//调拨界面
+	public void disAllocateUI(boolean Visible) {
+		Jf9 = new JFrame("调拨");
+		Jf9.setLayout(new GridLayout(6,1,30,30));
+		Jf9.add(new JLabel("请选择调拨库存或调拨仓库"));
+		JPanel Jp1 = new JPanel(new GridLayout(1,2,30,30));
+		Jrb24 = new JRadioButton("调拨库存");
+		Jrb24.addActionListener(this);
+		Jrb25 = new JRadioButton("调拨仓库");
+		Jrb25.addActionListener(this);
+		Jgroup8 = new ButtonGroup();
+		Jgroup8.add(Jrb24);
+		Jgroup8.add(Jrb25);
+		Jp1.add(Jrb24);
+		Jp1.add(Jrb25);
+		Jf9.add(Jp1);
+		JPanel Jp2 = new JPanel(new GridLayout(1,2,30,30));
+		Jl22 = new JLabel("货架");
+		Jp2.add(Jl22);
+		Jcb6 = new JComboBox();
+		Jcb6.addItem("A");
+		Jcb6.addItem("B");
+		Jcb6.addItem("C");
+		Jp2.add(Jcb6);
+		Jf9.add(Jp2);
+		JPanel Jp3 = new JPanel(new GridLayout(1,2,30,30));
+		Jl23 = new JLabel("手机型号");
+		Jp3.add(Jl23);
+		Jtf15 = new JTextField(20);
+		Jp3.add(Jtf15);
+		Jf9.add(Jp3);
+		Jl24 = new JLabel();
+		Jf9.add(Jl24);
+		JPanel Jp4 = new JPanel(new GridLayout(1,2,30,30));
+		Jb20 = new JButton("返回上一级");
+		Jb20.addActionListener(this);
+		Jp4.add(Jb20);
+		Jb21 = new JButton("执行");
+		Jb21.addActionListener(this);
+		Jp4.add(Jb21);
+		Jf9.add(Jp4);
+		Jf9.setSize(300,300);
+		Jf9.setVisible(Visible);
+		Jf9.setLocation(450,300);
+		Jf9.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
 	public void actionPerformed(ActionEvent e) {
 		Mysql ms1 = new Mysql();
 		if(e.getSource()==Jrb1) {
@@ -734,7 +846,7 @@ public class GUI extends JFrame implements ActionListener{
 		if(e.getSource()==Jb15) {
 			if(DeleteType.equals("PhoneMessage")) {
 				String str = "'"+Jtf9.getText()+"'";
-				ms1.deletePhoneMessage(Jcb2.getSelectedItem().toString(), str);
+				ms1.deletePhoneMessage(Jcb3.getSelectedItem().toString(), str);
 			}
 			if(DeleteType.equals("ClientOrder")) {
 				String str = "'"+Jtf9.getText()+"'";
@@ -746,7 +858,7 @@ public class GUI extends JFrame implements ActionListener{
 			}
 			if(DeleteType.equals("StoreMessage")) {
 				String str = "'"+Jtf9.getText()+"'";
-				ms1.deleteStoreMessage(Jcb2.getSelectedItem().toString(), str);
+				ms1.deleteStoreMessage(Jcb3.getSelectedItem().toString(), str);
 			}
 		}
 		if(e.getSource()==Jb10) {
@@ -798,7 +910,7 @@ public class GUI extends JFrame implements ActionListener{
 			Jtf12.setText("");
 		}
 		if(e.getSource()==Jrb21) {
-			DeleteType = "StoreMessage";
+			ChangeType = "StoreMessage";
 			Jcb4.removeAllItems();
 			Jcb4.addItem("A");
 			Jcb4.addItem("B");
@@ -815,7 +927,7 @@ public class GUI extends JFrame implements ActionListener{
 		}
 		if(e.getSource()==Jb17) {
 			if(ChangeType.equals("PhoneMessage")) {
-				ms1.changePhoneMessage(Jcb2.getSelectedItem().toString(),"'"+Jtf11.getText()+"'",Jtf10.getText(),"'"+Jtf12.getText()+"'");
+				ms1.changePhoneMessage(Jcb4.getSelectedItem().toString(),Jtf10.getText(),"'"+Jtf11.getText()+"'","'"+Jtf12.getText()+"'");
 			}
 			if(ChangeType.equals("ClientOrder")) {
 				ms1.changeClientOrder("'"+Jtf11.getText()+"'",Jtf10.getText(),"'"+Jtf12.getText()+"'");
@@ -824,7 +936,83 @@ public class GUI extends JFrame implements ActionListener{
 				ms1.changeFirmMessage("'"+Jtf11.getText()+"'",Jtf10.getText(),"'"+Jtf12.getText()+"'");
 			}
 			if(ChangeType.equals("StoreMessage")) {
-				ms1.changeStoreMessage(Jcb2.getSelectedItem().toString(),"'"+Jtf11.getText()+"'",Jtf10.getText(),"'"+Jtf12.getText()+"'");
+				ms1.changeStoreMessage(Jcb4.getSelectedItem().toString(),Jtf10.getText(),"'"+Jtf11.getText()+"'","'"+Jtf12.getText()+"'");
+			}
+		}
+		if(e.getSource()==Jmi1) {
+			this.disWarehouseUI(true);
+			Jf1.setVisible(false);
+		}
+		if(e.getSource()==Jb18) {
+			Jf8.setVisible(false);
+			Jf1.setVisible(true);
+		}
+		if(e.getSource()==Jrb22) {
+			IOType = "Input";
+		}
+		if(e.getSource()==Jrb23) {
+			IOType = "Output";
+		}
+		if(e.getSource()==Jb19) {
+			if(IOType.equals("Input")) {
+				int flag = ms1.warehousing(Jcb5.getSelectedItem().toString(),Jtf13.getText(), Jtf14.getText());
+				if(flag == 0) {
+					Jl21.setText("入库失败，请先完善手机信息");
+				}
+				else {
+					Jl21.setText("入库成功");
+				}
+			}
+			if(IOType.equals("Output")) {
+				int flag = ms1.ex_warehousing(Jcb5.getSelectedItem().toString(),Jtf13.getText(), Jtf14.getText());
+				if(flag == 0) {
+					Jl21.setText("出库失败，未找到相关信息");
+				}
+				else if(flag == 1) {
+					Jl21.setText("出库失败，库存不足");
+				}
+				else {
+					Jl21.setText("出库成功");
+				}
+			}
+		}
+		if(e.getSource()==Jmi2) {
+			this.disAllocateUI(true);
+			Jf1.setVisible(false);
+		}
+		if(e.getSource()==Jb20) {
+			Jf9.setVisible(false);
+			Jf1.setVisible(true);
+		}
+		if(e.getSource()==Jrb24) {
+			AllocateType = "Stock";
+			Jcb6.setVisible(false);
+			Jl22.setVisible(false);
+		}
+		if(e.getSource()==Jrb25) {
+			AllocateType = "Store";
+			Jcb6.setVisible(true);
+			Jl22.setVisible(true);
+		}
+		if(e.getSource()==Jb21) {
+			String str = "";
+			if(AllocateType.equals("Stock")) {
+				str = ms1.allocateStock("'"+Jtf15.getText()+"'");
+				if(str.equals("")) {
+					Jl24.setText("未查到相关信息");
+				}
+				else {
+					Jl24.setText("库存位置为："+str);
+				}
+			}
+			if(AllocateType.equals("Store")) {
+				str = ms1.allocateStore(Jcb6.getSelectedItem().toString(), Jtf15.getText());
+				if(str.equals("仓库已满，请切换仓库")) {
+					Jl24.setText("仓库已满，请切换仓库");
+				}
+				else {
+					Jl24.setText("库存位置为："+str);
+				}
 			}
 		}
 	}
