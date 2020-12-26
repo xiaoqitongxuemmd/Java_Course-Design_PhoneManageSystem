@@ -1,4 +1,3 @@
-//数据库编程
 package PhoneStoreManageSystem;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
@@ -505,7 +504,7 @@ public class Mysql {
 		}
 	}
 	//修改仓储数据
-	public void changeStoreMessage(String Shelf,String Num,String Item,String New) {
+	public void changeStoreMessage(String Shelf,String Item,String Num,String New) {
 		try {
 			con = DriverManager.getConnection(conURL,User,Pass);
 			s = con.createStatement();
@@ -519,7 +518,7 @@ public class Mysql {
 			System.out.println("SQLException:"+e.getMessage());
 		}
 	}
-	//入库查重
+	//入库查重 flag = 1 为重复
 	public int isExist(String Shelf,String Num) {
 		int flag = 0;
 		try {
@@ -655,8 +654,127 @@ public class Mysql {
 		}
 		return flag;
 	}
+	//入库函数 flag = 1为入库 flag = 0 为入库失败
+	public int warehousing(String Firm,String PhoneModel,String Num) {
+		int flag = 0;
+		try {
+			con = DriverManager.getConnection(conURL,User,Pass);
+			s = con.createStatement();
+			s.execute("use PhoneMessage");
+			String query1 = "select * from "+Firm+" where PhoneModel = '"+PhoneModel+"'";
+			ResultSet rs1 = s.executeQuery(query1);
+			if(rs1.next()) {
+				flag = 1;
+				String New = (Integer.parseInt(rs1.getString("Num"))+Integer.parseInt(Num))+"";
+				String r1 = "update "+Firm+" set Num ="+New+" where PhoneModel= '"+PhoneModel+"'";
+				s.executeUpdate(r1);
+			}
+			s.close();
+			con.close();
+		}
+		catch(SQLException e) {
+			System.out.println("SQLException:"+e.getMessage());
+		}
+		return flag;
+	}
+	//出库函数 flag = 0 不存在，flag = 1 库存不足 ,flag = 2 出库成功
+	public int ex_warehousing(String Firm,String PhoneModel,String Num) {
+		int flag = 0;
+		try {
+			con = DriverManager.getConnection(conURL,User,Pass);
+			s = con.createStatement();
+			s.execute("use PhoneMessage");
+			String query1 = "select * from "+Firm+" where PhoneModel = '"+PhoneModel+"'";
+			ResultSet rs1 = s.executeQuery(query1);
+			if(rs1.next()) {
+				flag = 1;
+				if(Integer.parseInt(rs1.getString("Num"))-Integer.parseInt(Num)>=0) {
+					flag = 2;
+					String New = (Integer.parseInt(rs1.getString("Num"))-Integer.parseInt(Num))+"";
+					String r1 = "update "+Firm+" set Num ="+New+" where PhoneModel= '"+PhoneModel+"'";
+					s.executeUpdate(r1);
+				}
+			}
+			s.close();
+			con.close();
+		}
+		catch(SQLException e) {
+			System.out.println("SQLException:"+e.getMessage());
+		}
+		return flag;
+	}
+	//仓库调拨
+	public String allocateStore(String Shelf,String PhoneModel) {
+		String str = "";
+		int count = 1;
+		try {
+			con = DriverManager.getConnection(conURL,User,Pass);
+			s = con.createStatement();
+			s.execute("use StoreMessage");
+			String query1 = "select * from "+Shelf+" where PhoneModel = '"+PhoneModel+"'";
+			ResultSet rs1 = s.executeQuery(query1);
+			if(rs1.next()) {
+				str = Shelf+rs1.getString("Num");
+			}
+			else {
+				while(count<100) {
+					if(isExist(Shelf,"'"+count+"'")==0) {
+						addStoreMessage(Shelf,"'"+count+"','"+PhoneModel+"'");
+						str = Shelf+count+"";
+						break;
+					}
+					count++;
+				}
+				if(count >= 1000) {
+					str = "仓库已满，请切换仓库";
+				}
+			}
+			s.close();
+			con.close();
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return str;
+	}
+	//库存调拨
+	public String allocateStock(String PhoneModel) {
+		String str = "";
+		try {
+			con = DriverManager.getConnection(conURL,User,Pass);
+			s = con.createStatement();
+			s.execute("use StoreMessage");
+			String query1 = "select * from A where PhoneModel="+PhoneModel;
+			ResultSet rs1 = s.executeQuery(query1);
+			while(rs1.next()) {
+				str += "A"+rs1.getString("Num");
+				str += "\n";
+			}
+			String query2 = "select * from B where PhoneModel="+PhoneModel;
+			ResultSet rs2 = s.executeQuery(query2);
+			while(rs2.next()) {
+				str += "B"+rs2.getString("Num");
+				str += "\n";
+			}
+			String query3 = "select * from C where PhoneModel="+PhoneModel;
+			ResultSet rs3 = s.executeQuery(query3);
+			while(rs3.next()) {
+				str += "C"+rs3.getString("Num");
+				str += "\n";
+			}
+			s.close();
+			con.close();
+		}
+		catch(SQLException e) {
+			System.out.println("SQLException:"+e.getMessage());
+		}
+		return str;
+	}
 	public static void main(String[] args) {
 		Mysql m = new Mysql();
 		//m.init();
+		//System.out.println(m.ex_warehousing("Apple","IPhonex", "20"));
+		System.out.println(m.allocateStock("'IPhone12'"));
+		//System.out.println(m.isExist("A", """));
 	}
 }
